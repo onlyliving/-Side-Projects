@@ -1,0 +1,160 @@
+body,
+button,
+input,
+select,
+textarea,
+table {
+    font-family: 'sans-serif';
+    /*-webkit-font-smoothing: antialiased;*/
+}
+
+table{
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+header,
+nav,
+main,
+section,
+article,
+aside,
+footer {
+    display: block;
+    box-sizing: border-box;
+}
+
+body {
+    font-size: 16px;
+    color: #333;
+    cursor: default;
+    -webkit-overflow-scrolling: touch
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+div,
+ul,
+ol,
+li,
+input {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box
+}
+
+ul,
+ol,
+li {
+    list-style: none
+}
+
+address,
+em {
+    font-style: normal
+}
+
+a {
+    text-decoration: none;
+    display: block;
+    color: #4c4c4c;
+    -webkit-tap-highlight-color:transparent;
+    cursor: pointer;
+}
+
+button {
+    background: 0;
+    border: 0;
+    padding: 0;
+    -webkit-tap-highlight-color:transparent;
+    cursor: pointer
+}
+
+button:focus,
+textarea:focus {
+    outline: 0
+}
+
+img {
+    border: 0 none
+}
+
+input{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+input::-ms-check{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/* IE10 이상에서 input box 에 추가된 지우기 버튼 제거 */
+input::-ms-clear {
+    display: none;
+}
+
+/* input type number 에서 화살표 제거 */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+input:focus{
+    outline: 0
+}
+
+.hide-text{
+    position: absolute;
+    left: -9999px;
+    top: -9999px
+}
+
+.loader-default{
+    display: none;
+    z-index: 9999;
+    position: fixed;
+    left:0;
+    right: 0;
+    top:0;
+    bottom:0;
+}
+.loader-default.is-show{
+    display: block;
+}
+
+.loader-default:after {
+    content: '';
+    box-sizing: border-box;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    left: calc((100vw / 2) - 10px);
+    bottom: 24px;
+    border: 4px solid transparent;
+    border-radius: 50%;
+    border-right: 4px solid #000;
+    border-left: 4px solid #000;
+    border-top: 4px solid #000;
+    animation: spin--loader-default 0.8s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin--loader-default {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin--loader-default {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
