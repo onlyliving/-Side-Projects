@@ -14,10 +14,47 @@
     <h1 class="hide-text">카드콘텐츠 배경 이미지 검색</h1>
     <section class="search-box-wrap">
         <p class="search-box-wrap__sub-title">카드콘텐츠에 들어가는 배경 이미지를 찾고 싶을 때 이용해보세요.</p>
-        <div class="search-box">
+        <article class="search-info">
+            <h2 class="search-info__head">검색 팁</h2>
+            <ul class="search-info__list">
+                <li>영어로 검색해주세요.</li>
+                <li>다중 키워드 검색시 콤마(,)를 이용하세요. Ex) yellow, circle</li>
+            </ul>
+        </article>
+        <article class="search-box">
+            <h2 class="hide-text">검색 입력창</h2>
             <input id="searchInput" class="search-box__input" type="text" placeholder="영어로 입력해주세요." autofocus>
             <button id="searchBtn" class="search-box__btn" type="button">search</button>
-        </div>
+        </article>
+        <article class="search-tag">
+            <h2 class="hide-text">태그 검색</h2>
+            <ul class="search-tag__list">
+                <li><button type="button" value="trip">여행</button></li>
+                <li><button type="button" value="it, social, office, phone, notebook, media">IT</button></li>
+                <li><button type="button" value="energy, active, dynamic, jogging, climbing, yoga">건강</button></li>
+                <li><button type="button" value="cooking, healthy">요리</button></li>
+                <li><button type="button" value="forest">숲</button></li>
+                <li><button type="button" value="tree, forest">나무</button></li>
+                <li><button type="button" value="eyes, human">눈이 포함된 사진</button></li>
+                <li><button type="button" value="sky">하늘</button></li>
+                <li><button type="button" value="sea, blue">바다</button></li>
+                <li><button type="button" value="natural, green">자연</button></li>
+                <li><button type="button" value="anger, crying">스트레스</button></li>
+                <li><button type="button" value="mode, dawn">감성</button></li>
+                <li><button type="button" value="love">사랑</button></li>
+                <li><button type="button" value="interior">인테리어</button></li>
+            </ul>
+        </article>
+        <article class="search-filter">
+            <h2 class="hide-text">검색 필터</h2>
+            <ul class="search-filter__list">
+                <li class="is-active"><button type="button" name="filter" value="squarish">이미지 정사각형</button></li>
+                <li><button type="button" name="filter" value="landscape">이미지 가로형</button></li>
+                <li><button type="button" name="filter" value="portrait">이미지 세로형</button></li>
+                <!-- <li class="is-active">FONT - Sans-Sarif</li> -->
+                <!-- <li>FONT - sarif</li> -->
+            </ul>
+        </article>
     </section>
     <section class="result-box">
         <h2 class="hide-text">이미지 검색 결과</h2>

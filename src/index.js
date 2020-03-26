@@ -21,10 +21,78 @@ const searchBtn = document.getElementById('searchBtn');
 //   timeout: 500 // values set in ms
 // });
 
+let reqData = {
+  keywords : '',
+  pageNum : 1,
+  perPage : 12,
+  orientation : 'squarish'
+};
+
+let resultItemEl = '';
+let imageUrl = '';
+let resDataTotalPage = '';
+
+/**
+ * 
+ * @param {*} firstLoad 
+ * 이미지 좋아요가 많은 순으로 내림차순
+ */
+const getDateOfImages = (firstLoad) => {
+  unsplash.search.photos(reqData.keywords, reqData.pageNum, reqData.perPage, { orientation: reqData.orientation }).then(toJson).then(json => {
+
+    if (firstLoad === 'firstLoad') {
+      if (json.total === 0) {
+        resultTopInfo.innerHTML = `<em>[ ${reqData.keywords} ]</em> 검색어에 대한 결과를 찾기 못했습니다. 다른 키워드로 검색해주세요. :)`;
+        document.getElementById('resultEl').innerHTML = '';
+        return false;
+      }
+    }
+
+    if ((json.total !== 0) && (json.results !== [])) {
+      
+      if (document.getElementById('loader').classList.contains('is-show')) {
+        document.getElementById('loader').classList.remove('is-show');
+      }
+
+      if (firstLoad === 'firstLoad') {
+        document.getElementById('resultTopInfo').innerText = `${json.total}개 이미지를 찾았습니다. 텍스트를 원하는 문장으로 바꿔보세요.`;
+        resDataTotalPage = json.total_pages;
+      }
+
+      let reSortData = [];
+      reSortData = json.results;
+      reSortData.sort(function(a, b) {
+        if (a.likes < b.likes) {
+          return 1;
+        }
+        if (a.likes > b.likes) {
+          return -1;
+        }
+        return 0;
+      });
+
+      console.log(reSortData);
+
+      for (let i = 0; i < reSortData.length; i += 1) {
+        imageUrl = reSortData[i].urls.small;
+        resultItemEl += `
+        <li class="result-item">
+              <textarea class="result-item__textarea">신기루 같은 하루</textarea>
+              <div class="result-item__img-wrap">
+                  <img src=${imageUrl}>
+              </div>
+          </li>`;
+      }
+
+      document.getElementById('resultEl').innerHTML = resultItemEl;
+
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
 
   searchInput.addEventListener('keypress', () => {
-    console.log(`keypress : ${searchInput.value}`);
     if (event.keyCode === 13) {
       event.preventDefault();
       event.stopPropagation();
@@ -34,87 +102,79 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   searchBtn.addEventListener('click', () => {
-    let inputText = searchInput.value;
-    inputText = inputText.trim();
+    reqData.keywords = searchInput.value.trim();
+    resultItemEl = '';
+    reqData.pageNum = 1;
 
-    if (!inputText) {
+    if (document.getElementById('resultBottomInfo').classList.contains('is-show')) {
+      document.getElementById('resultBottomInfo').classList.remove('is-show');
+    }
+    
+    if (!reqData.keywords) {
       alert('검색어를 입력해주세요.');
       return false;
     }
 
-    // orientation 방향도 검색할 떄 정할 수 있게 하자. Valid values: all, landscape, portrait, squarish; default: all
-    // TODO : 키워드가 영어 검색만 된다.
-    let reqDataPage = 1;
-    
-    unsplash.search.photos(inputText, reqDataPage, 10, { orientation: "squarish" }).then(toJson).then(json => {
-      let resultItemEl = '';
+    getDateOfImages('firstLoad');
 
-      if (json.total === 0) {
-        resultTopInfo.innerHTML = `<em>[ ${inputText} ]</em> 검색어에 대한 결과를 찾기 못했습니다. 다른 키워드로 검색해주세요. :)`;
-        document.getElementById('resultEl').innerHTML = '';
-        return false;
-      }
-
-      
-      if ((json.total !== 0) && (json.results !== [])) {
-        document.getElementById('resultTopInfo').innerText = `${json.total}개 이미지를 찾았습니다. 텍스트를 원하는 문장으로 바꿔보세요.`;
-        let imageUrl = '';
-        let resDataTotalPage = json.total_pages;
-        
-        for (let i = 0; i < json.results.length; i += 1) {
-          imageUrl = json.results[i].urls.small;
-          resultItemEl += `
-          <li class="result-item">
-                <textarea class="result-item__textarea">신기루 같은 하루</textarea>
-                <div class="result-item__img-wrap">
-                    <img src=${imageUrl}>
-                </div>
-            </li>`;
-        }
-
-        document.getElementById('resultEl').innerHTML = resultItemEl;
-
-
-        /// 스크롤을 내리면 페이지가 더 보여야 함.
-        window.addEventListener('scroll', () => {
-          if (document.documentElement.scrollTop === document.documentElement.scrollHeight - document.documentElement.clientHeight) {
-            console.log('스크롤이 맨 아래에 있습니다.')
-            document.getElementById('loader').classList.add('is-show');
-
-            if (reqDataPage === resDataTotalPage) {
-              resultBottomInfo.classList.add('is-show');
-              return true;
-            }
-            
-            reqDataPage ++;
-            unsplash.search.photos(inputText, reqDataPage, 10, { orientation: "squarish" }).then(toJson).then(json => {
-
-              // console.log('== toJson  ==');
-              // console.log(json);
-              // console.log('==! toJson  ==');
-              if ((json.total !== 0) && (json.results !== [])) {
-                document.getElementById('loader').classList.remove('is-show');
-
-                for (let j = 0; j < json.results.length; j += 1) {
-                  imageUrl = json.results[j].urls.small;
-                  resultItemEl += `
-                  <li class="result-item">
-                        <textarea class="result-item__textarea">신기루 같은 하루</textarea>
-                        <div class="result-item__img-wrap">
-                            <img src=${imageUrl}>
-                        </div>
-                    </li>`;
-                }
-        
-                document.getElementById('resultEl').innerHTML = resultItemEl;
-                return true;
-              }
-            });
-          }
-        });
-
-      }
-    });
   });
 
+  window.addEventListener('scroll', () => {
+    if (document.documentElement.scrollTop === document.documentElement.scrollHeight - document.documentElement.clientHeight) {
+      console.log('스크롤이 맨 아래에 있습니다.')
+      document.getElementById('loader').classList.add('is-show');
+
+      if (reqData.pageNum === resDataTotalPage) {
+        document.getElementById('loader').classList.remove('is-show');
+        document.getElementById('resultBottomInfo').classList.add('is-show');
+        return true;
+      }
+      
+      reqData.pageNum ++;
+      getDateOfImages();
+
+    }
+  });
+
+  for (let i = 0; i < document.querySelectorAll('.search-tag__list li').length; i += 1 ) {
+    document.querySelectorAll('.search-tag__list li')[i].addEventListener('click', () => {
+      searchInput.value = document.querySelectorAll('.search-tag__list li')[i].querySelector('button').value;
+      searchBtn.click();
+      return true;
+    });
+  }
+
+
+  for (let i = 0; i < document.querySelectorAll('.search-filter__list li').length; i += 1) {
+    // 필터 클릭할 때 마다 api 요청.
+    document.querySelectorAll('.search-filter__list li')[i].addEventListener('click', () => {
+
+      // is-active class reset.
+      for (let j = 0; j < document.querySelectorAll('.search-filter__list li').length; j += 1) {
+        if (document.querySelectorAll('.search-filter__list li')[j].classList.contains('is-active')) {
+          document.querySelectorAll('.search-filter__list li')[j].classList.remove('is-active');
+        }
+      }
+
+      document.querySelectorAll('.search-filter__list li')[i].classList.contains('is-active') ? document.querySelectorAll('.search-filter__list li')[i].classList.remove('is-active') : document.querySelectorAll('.search-filter__list li')[i].classList.add('is-active');
+      reqData.orientation = document.querySelectorAll('.search-filter__list li')[i].querySelector('button').value;
+      searchBtn.click();
+
+      if (reqData.orientation === 'landscape') {
+        // 가로
+        document.getElementById('resultEl').classList.add('is-type-landscape');
+        document.getElementById('resultEl').classList.remove('is-type-portrait');
+      } else if (reqData.orientation === 'portrait') {
+        // 세로 portrait
+        document.getElementById('resultEl').classList.remove('is-type-landscape');
+        document.getElementById('resultEl').classList.add('is-type-portrait');
+
+      } else {
+        document.getElementById('resultEl').classList.remove('is-type-landscape');
+        document.getElementById('resultEl').classList.remove('is-type-portrait');
+      }
+
+      return true;
+    });
+  }
 });
