@@ -29,7 +29,6 @@ let reqData = {
 };
 
 let resultItemEl = '';
-let imageUrl = '';
 let resDataTotalPage = '';
 
 /**
@@ -74,20 +73,40 @@ const getDateOfImages = (firstLoad) => {
       console.log(reSortData);
 
       for (let i = 0; i < reSortData.length; i += 1) {
-        imageUrl = reSortData[i].urls.small;
         resultItemEl += `
         <li class="result-item">
+              <a class="result-item__link" href=${reSortData[i].links.html} target="_blank"></a>
               <textarea class="result-item__textarea">신기루 같은 하루</textarea>
               <div class="result-item__img-wrap">
-                  <img src=${imageUrl}>
+                  <img src=${reSortData[i].urls.small}>
               </div>
           </li>`;
       }
 
       document.getElementById('resultEl').innerHTML = resultItemEl;
-
+      imageHoverEvent();
+      document.getElementById('textChangeEvent').style.display = 'flex';
     }
   });
+}
+
+const imageHoverEvent = () => {
+  if(document.getElementsByClassName('result-item')) {
+
+    for (let i = 0; i < document.getElementsByClassName('result-item').length; i += 1) {
+      document.getElementsByClassName('result-item')[i].addEventListener('mouseenter', () => {
+        document.getElementsByClassName('result-item')[i].classList.add('is-hover');
+        return true;
+      });
+  
+      document.getElementsByClassName('result-item')[i].addEventListener('mouseleave', () => {
+        document.getElementsByClassName('result-item')[i].classList.remove('is-hover');
+        return true;
+      });
+    }
+  }
+
+  return false;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -144,7 +163,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-
   for (let i = 0; i < document.querySelectorAll('.search-filter__list li').length; i += 1) {
     // 필터 클릭할 때 마다 api 요청.
     document.querySelectorAll('.search-filter__list li')[i].addEventListener('click', () => {
@@ -177,4 +195,34 @@ document.addEventListener('DOMContentLoaded', () => {
       return true;
     });
   }
+
+  textAllChangeInput.addEventListener('keypress', () => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      event.stopPropagation();
+      textAllChangeSend.click();
+      return true; 
+    }
+  });
+
+  let modifyText = '';
+  textAllChangeSend.addEventListener('click', () => {
+    if (!textAllChangeInput.value) {
+      alert('내용을 입력해주세요.');
+      return false;
+    }
+
+    modifyText = textAllChangeInput.value;
+    for (let i = 0; i < document.getElementsByClassName('result-item').length; i += 1) {
+      document.getElementsByClassName('result-item')[i].querySelector('textarea').value = modifyText;
+    }
+  });
+
+  for (let i = 0; i < document.querySelectorAll('#filterFontList > li').length; i += 1) {
+    document.querySelectorAll('#filterFontList > li')[i].addEventListener('click', () => {
+      document.body.className = `font-family-${document.querySelectorAll('#filterFontList > li')[i].querySelector('button').value}`;
+    });
+    
+  }
+  
 });

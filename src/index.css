@@ -1,8 +1,24 @@
+@import url('https://fonts.googleapis.com/css?family=Jua|Do+Hyeon|Nanum+Myeongjo:700&display=swap');
+
+
+.font-family-Jua .result-item textarea {
+    font-family: 'Jua', sans-serif;
+}
+
+.font-family-DoHyeon .result-item textarea {
+    font-family: 'Do Hyeon', sans-serif;
+}
+
+.font-family-NanumMyeongjo .result-item textarea {
+    font-family: 'Nanum Myeongjo', sans-serif;
+}
+
 .search-box-wrap{
     background:#f2f2f2
 }
 .search-box-wrap__sub-title{
     text-align: center;
+    line-height: 1.5;
     padding: 34px 16px 24px 16px;
 }
 .search-box{
@@ -39,8 +55,9 @@
     margin-right: 6px;
 }
 .search-info__list{
+    position: relative;
     margin-top: 6px;
-    padding-left: 10px;
+    padding-left: 12px;
     color: #c7c7c7;
 }
 .search-info__list > li {
@@ -52,7 +69,8 @@
 }
 .search-info__list > li:before{
     content:'-';
-    margin-right: 6px;
+    position: absolute;
+    left: 0
 }
 .search-tag__list{
     overflow: hidden;
@@ -92,6 +110,7 @@
     margin: 0 3px 16px 0;
     border-radius: 30px;
     border: 1px solid #d0d0d0;
+    word-break: keep-all;
     background: #fff;
     cursor: pointer;
 }
@@ -135,18 +154,13 @@ result
     flex-direction: row;
     flex-wrap: wrap;
 }
-.result-item{
-    position: relative;
-    width: calc(50% - 12px);
-    height: calc(100vw / 2 - 36px);
-    margin: 0 24px 24px 0;
-}
+
 .result-item__textarea{
     z-index: 1;
     position: relative;
     width: 100%;
     height: 100%;
-    font-size: 32px;
+    font-size: 28px;
     font-weight: lighter;
     padding: 45% 16px 0 16px;
     text-align: center;
@@ -190,6 +204,7 @@ result
 }
 .result-box__top-info{
     margin-bottom: 24px;
+    word-break: keep-all;
 }
 .result-box__top-info > em {
     font-weight: bold;
@@ -204,23 +219,112 @@ result
     display: block;
 }
 
-
-/* 가로 */
-.result-item-wrap.is-type-landscape .result-item {
-    height: calc(100vw / 2 * 0.75 - 36px);
+.result-item__link {
+    display: none;
 }
 
-/* 세로 */
-.result-item-wrap.is-type-portrait .result-item {
-    height: calc(100vw / 2 * 1.2 - 36px);
+.result-item.is-hover .result-item__link {
+    display: block;
+    z-index: 2;
+    position: absolute;
+    width: 100%;
+    height: 60px;
 }
 
-@media(max-width:959px) {
+.result-item.is-hover .result-item__link:before {
+    z-index: 2;
+    content: 'Link';
+    color: #fff;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 16px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: right;
+    background: linear-gradient( to bottom, rgba(0,0,0, 0.2), transparent );
+    box-sizing: border-box;
+    transition-duration: 2s;
+    transition-timing-function: ease;
+    cursor: zoom-in;
+}
+
+.result-item{
+    position: relative;
+    margin: 0 24px 24px 0;
+}
+
+.text-all-change-box{
+    display: none;
+    margin: 0 auto 24px auto;
+    text-align: center;
+}
+.text-all-change-box__input{
+    border: 1px solid #d0d0d0;
+    padding: 8px;
+    font-size: 14px;
+    width: calc(100% - 152px);
+    height: 37px;
+    line-height: 37px;
+}
+.text-all-change-box__btn{
+    font-size: 14px;
+    background: #e0e0e0;
+    height: 37px;
+    padding: 8px;
+    font-weight: bold;
+    width: 152px;
+    border: 1px solid #d0d0d0;
+    margin-left: -1px;
+}
+
+@media (max-width: 499px) {
+    .result-item {
+        width: 100%;
+        height: calc(100vw - 48px);
+        margin-right: 0;
+    }
+    .result-item-wrap.is-type-landscape .result-item {
+        height: calc(100vw * 0.75 - 48px);
+    }
+    .result-item-wrap.is-type-portrait .result-item {
+        height: calc(100vw * 1.2 - 48px);
+    }
+    .search-filter__list{
+        display: flex
+    }
+    .search-filter__list > li {
+        display: inline-flex;
+        padding: 3px 12px;
+        height: initial;
+        margin: 0 8px 16px 0;
+    }
+
+    .search-filter__list > li.is-active:before{
+        margin: 9px 2px 0 6px
+    }
+}
+
+@media (min-width: 500px) and (max-width: 768px) {
+    .result-item{
+        width: calc(50% - 12px);
+        height: calc(100vw / 2 - 36px);
+    }
+    .result-item-wrap.is-type-landscape .result-item {
+        height: calc(100vw / 2 * 0.75 - 36px);
+    }
+    
+    .result-item-wrap.is-type-portrait .result-item {
+        height: calc(100vw / 2 * 1.2 - 36px);
+    }
     .result-item:nth-child(2n) {
         margin-right: 0
     }
 }
-@media(min-width:960px) and (max-width: 1024px) {
+
+@media(min-width:769px) and (max-width: 1280px) {
     .result-item {
         width: calc(33.3% - 16px);
         height: calc(100vw / 3 - 32.33px);
@@ -237,7 +341,7 @@ result
     
 }
 
-@media(min-width:1025px) {
+@media(min-width:1281px) {
     .result-item {
         width: calc(25% - 12px);
         height: calc(100vw / 4 - 24px)
@@ -253,5 +357,8 @@ result
     }
     .result-item{
         margin: 0 16px 16px 0
+    }
+    .result-item__textarea{
+        font-size: 32px;
     }
 }
