@@ -46,23 +46,22 @@
                 <li><button type="button" value="interior">인테리어</button></li>
             </ul>
         </article>
-        <article class="search-filter">
+        <article id="filterEl" class="search-filter">
             <h2 class="hide-text">검색 필터</h2>
-            <div>
+            <div class="search-filter-wrap">
                 <ul class="search-filter__list">
                     <li class="is-active"><button type="button" name="filter" value="squarish">이미지 정사각형</button></li>
-                    <li><button type="button" name="filter" value="landscape">이미지 가로형</button></li>
-                    <li><button type="button" name="filter" value="portrait">이미지 세로형</button></li>
-                    <!-- <li class="is-active">FONT - Sans-Sarif</li> -->
-                    <!-- <li>FONT - sarif</li> -->
+                    <li><button type="button" name="filter" value="landscape">가로형 이미지</button></li>
+                    <li><button type="button" name="filter" value="portrait">세로형 이미지</button></li>
                 </ul>
-                
                 <ul id="filterFontList" class="search-filter-font__list">
-                    <li><button type="button" value="Jua">주아체</button></li>
-                    <li><button type="button" value="DoHyeon">도현체</button></li>
-                    <li><button type="button" value="NanumMyeongjo">나눔명조체</button></li>
+                    <li><button type="button" name="font-type" value="Jua">폰트 주아체</button></li>
+                    <li><button type="button" name="font-type" value="DoHyeon">폰트 도현체</button></li>
+                    <li><button type="button" name="font-type" value="NanumMyeongjo">폰트 나눔명조체</button></li>
+                    <li><button type="button" name="font-weight" value="lighter">폰트 얇은</button></li>
+                    <li><button type="button" name="font-weight" value="bold">폰트 두꺼운</button></li>
+                    <li><button type="button" id="fontStyleReset">폰트 초기화</button></li>
                 </ul>
-
             </div>
             
         </article>

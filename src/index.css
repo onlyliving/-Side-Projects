@@ -13,6 +13,14 @@
     font-family: 'Nanum Myeongjo', sans-serif;
 }
 
+.font-weight-lighter .result-item textarea {
+    font-weight: lighter;
+}
+
+.font-weight-bold .result-item textarea {
+    font-weight: bold;
+}
+
 .search-box-wrap{
     background:#f2f2f2
 }
@@ -74,16 +82,11 @@
 }
 .search-tag__list{
     overflow: hidden;
-    padding: 0 24px;
+    padding: 0 24px 8px 24px;
 }
 .search-tag__list > li {
     float: left;
     margin: 0 8px 8px 0;
-    
-    /* height: 30px; */
-    /* line-height: 30px; */
-    /* border: 1px solid #bdbdbd; */
-    
 }
 .search-tag__list > li > button {
     padding: 0 6px;
@@ -99,15 +102,12 @@
 }
 
 .search-filter__list {
-    text-align: right;
-    padding: 8px 24px;
+    display: inline-block;
 }
 .search-filter__list > li{
     display: inline-block;
     padding: 0 12px;
-    height: 30px;
-    line-height: 30px;
-    margin: 0 3px 16px 0;
+    margin: 0 8px 8px 0;
     border-radius: 30px;
     border: 1px solid #d0d0d0;
     word-break: keep-all;
@@ -115,9 +115,6 @@
     cursor: pointer;
 }
 
-.search-filter__list > li:last-child{
-    margin-right: 0
-}
 .search-filter__list > li.is-active{
     color: #fff;
     background: #1f96b3;
@@ -137,7 +134,51 @@
     border-bottom: 2px solid #fff;
 }
 .search-filter__list > li > button {
+    height: 30px;
     font-size: 13px;
+}
+.search-filter{
+    display: none;
+}
+
+.search-filter-font__list {
+    display: inline-block;
+}
+
+.search-filter-font__list > li {
+    display: inline-block;
+    margin: 0 8px 8px 0;
+    padding: 0 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 30px;
+    background: #fff;
+}
+
+.search-filter-font__list > li > button {
+    height: 30px;
+    font-size: 14px;
+}
+
+.search-filter-font__list > li.is-active {
+    background: #1f95b3;
+    border-color: #1f95b3;
+}
+.search-filter-font__list > li.is-active:before{
+    content: '';
+    width: 4px;
+    height: 7px;
+    display: inline-block;
+    margin: 0 8px 1px 0;
+    transform: rotate(-45deg);
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+}
+
+.search-filter-font__list > li.is-active button {
+    color: #fff;
+}
+.search-filter-wrap{
+    padding: 0 24px 24px 24px;
 }
 
 
@@ -170,6 +211,7 @@ result
     border: none;
     resize: none;
     color: #fff;
+    word-break: keep-all;
 }
 .result-item-wrap.is-type-landscape .result-item__textarea{
     padding: 32% 16px 0 16px
@@ -291,19 +333,6 @@ result
     }
     .result-item-wrap.is-type-portrait .result-item {
         height: calc(100vw * 1.2 - 48px);
-    }
-    .search-filter__list{
-        display: flex
-    }
-    .search-filter__list > li {
-        display: inline-flex;
-        padding: 3px 12px;
-        height: initial;
-        margin: 0 8px 16px 0;
-    }
-
-    .search-filter__list > li.is-active:before{
-        margin: 9px 2px 0 6px
     }
 }
 

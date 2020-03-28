@@ -86,6 +86,7 @@ const getDateOfImages = (firstLoad) => {
       document.getElementById('resultEl').innerHTML = resultItemEl;
       imageHoverEvent();
       document.getElementById('textChangeEvent').style.display = 'flex';
+      document.getElementById('filterEl').style.display='block';
     }
   });
 }
@@ -196,6 +197,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  for ( let i = 0; i < document.querySelectorAll('#filterFontList > li').length; i += 1) {
+    document.querySelectorAll('#filterFontList > li')[i].addEventListener('click', () => {
+
+      for ( let j = 0; j < document.querySelectorAll('#filterFontList > li').length; j += 1) {
+        if (document.querySelectorAll('#filterFontList > li')[j].classList.contains('is-active')) {
+          document.querySelectorAll('#filterFontList > li')[j].classList.remove('is-active');
+        }
+      }
+      
+      document.querySelectorAll('#filterFontList > li')[i].classList.add('is-active');
+    });
+  }
+
   textAllChangeInput.addEventListener('keypress', () => {
     if (event.keyCode === 13) {
       event.preventDefault();
@@ -220,9 +234,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   for (let i = 0; i < document.querySelectorAll('#filterFontList > li').length; i += 1) {
     document.querySelectorAll('#filterFontList > li')[i].addEventListener('click', () => {
-      document.body.className = `font-family-${document.querySelectorAll('#filterFontList > li')[i].querySelector('button').value}`;
+      if (document.querySelectorAll('#filterFontList > li')[i].querySelector('button').name === 'font-type') {
+        document.body.className = `font-family-${document.querySelectorAll('#filterFontList > li')[i].querySelector('button').value}`;
+        return true;
+      }
+
+      if (document.querySelectorAll('#filterFontList > li')[i].querySelector('button').name === 'font-weight') {
+        document.body.className = `font-weight-${document.querySelectorAll('#filterFontList > li')[i].querySelector('button').value}`;
+        return true;
+      }
+      
     });
     
   }
+
+  document.getElementById('fontStyleReset').addEventListener('click', () => {
+    document.body.className = '';
+  });
   
 });
