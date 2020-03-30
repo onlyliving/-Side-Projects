@@ -1,12 +1,12 @@
-# (Side-Project) Image Search Service
+# 카드콘텐츠 배경 이미지 검색 사이트 구현
 
-- 카드콘텐츠 배경 이미지 검색 사이트 만들기
+- (Side-Project) Image Search Service
 
 ```
 이미지 무료 API(언스플래쉬 사이트)를 이용하여 이미지 검색사이트 만들기
 ```
 
-[언스플래쉬 사이트](https://unsplash.com/developers)
+참고 사이트 : [언스플래쉬 사이트](https://unsplash.com/developers)
 
 
 
@@ -53,3 +53,8 @@
 3.25~26 : js
 3.27 : 프로젝트 마무리
 ```
+
+## 완성된 사이트
+https://onlyliving.github.io/Side-Projects/dist/
+
+## 회고
