@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html lang="ko">
+<head>
+    <title>콘텐츠 배경 이미지</title>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="카드콘텐츠, 이미지,검색,이미지검색,컨셉이미지,배경,배경이미지">
+    <meta name="description" content="카드콘텐츠에 필요한 이미지를 쉽게 찾을 수 있게 도와드립니다.">
+    <meta name="robots" content="ALL">
+    <meta name="reply-to" content="greensohee88@naver.com">
+<link href="index.7457275385fb299340fe.css" rel="stylesheet"></head>
+<body>
+    <h1 class="hide-text">카드콘텐츠 배경 이미지 검색</h1>
+    <section class="search-box-wrap">
+        <p class="search-box-wrap__sub-title">카드콘텐츠의 배경 이미지를 쉽게 찾아드립니다!<br>unsplash 사이트의 무료이미지를 제공받았습니다. (문의 : 
+            greensohee88@naver.com)</p>
+        <article class="search-info">
+            <h2 class="search-info__head">검색 팁</h2>
+            <ul class="search-info__list">
+                <li>영어로 검색해주세요.</li>
+                <li>다중 키워드 검색 시 콤마( , )를 넣어주세요. Ex) yellow, circle</li>
+            </ul>
+        </article>
+        <article class="search-box">
+            <h2 class="hide-text">검색 입력창</h2>
+            <input id="searchInput" class="search-box__input" type="text" placeholder="영어로 입력해주세요." autofocus>
+            <button id="searchBtn" class="search-box__btn" type="button">search</button>
+        </article>
+        <article class="search-tag">
+            <h2 class="hide-text">태그 검색</h2>
+            <ul class="search-tag__list">
+                <li><button type="button" value="trip">여행</button></li>
+                <li><button type="button" value="it, social, office, phone, notebook, media">IT</button></li>
+                <li><button type="button" value="energy, active, dynamic, jogging, climbing, yoga">건강</button></li>
+                <li><button type="button" value="cooking, healthy">요리</button></li>
+                <li><button type="button" value="forest">숲</button></li>
+                <li><button type="button" value="tree, forest">나무</button></li>
+                <li><button type="button" value="eyes, human">눈이 포함된 사진</button></li>
+                <li><button type="button" value="sky">하늘</button></li>
+                <li><button type="button" value="sea, blue">바다</button></li>
+                <li><button type="button" value="natural, green">자연</button></li>
+                <li><button type="button" value="anger, crying">스트레스</button></li>
+                <li><button type="button" value="mode, dawn">감성</button></li>
+                <li><button type="button" value="love, ardent">사랑</button></li>
+                <li><button type="button" value="interior">인테리어</button></li>
+            </ul>
+        </article>
+        <article id="filterEl" class="search-filter">
+            <h2 class="hide-text">검색 필터</h2>
+            <div class="search-filter-wrap">
+                <ul class="search-filter__list">
+                    <li class="is-active"><button type="button" name="filter" value="squarish">이미지 정사각형</button></li>
+                    <li><button type="button" name="filter" value="landscape">가로형 이미지</button></li>
+                    <li><button type="button" name="filter" value="portrait">세로형 이미지</button></li>
+                </ul>
+                <ul id="filterFontList" class="search-filter-font__list">
+                    <li><button type="button" name="font-type" value="Jua">폰트 주아체</button></li>
+                    <li><button type="button" name="font-type" value="DoHyeon">폰트 도현체</button></li>
+                    <li><button type="button" name="font-type" value="NanumMyeongjo">폰트 나눔명조체</button></li>
+                    <li><button type="button" name="font-weight" value="lighter">폰트 얇은</button></li>
+                    <li><button type="button" name="font-weight" value="bold">폰트 두꺼운</button></li>
+                    <li><button type="button" id="fontStyleReset">폰트 초기화</button></li>
+                </ul>
+            </div>
+            
+        </article>
+    </section>
+    <section class="result-box">
+        <h2 class="hide-text">이미지 검색 결과</h2>
+        <p id="resultTopInfo" class="result-box__top-info"></p>
+        <article id="textChangeEvent" class="text-all-change-box">
+            <h3 class="hide-text">텍스트 한번에 변경하기</h3>
+            <input id="textAllChangeInput" class="text-all-change-box__input" type="text" placeholder="텍스트를 한번에 바꾸려면 내용을 입력해주세요.">
+            <button id="textAllChangeSend" class="text-all-change-box__btn" type="button">Change Text</button>
+        </article>
+        <ol id="resultEl" class="result-item-wrap"></ol>
+        <p id="resultBottomInfo" class="result-box__bottom-info">모든 이미지가 로드되었습니다.</p>
+    </section>
+    <div id="loader" class="loader-default"></div>
+    <script src="index.bundle.js"></script>
+</body>
+</html>
