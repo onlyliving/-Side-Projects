@@ -15,6 +15,10 @@ npm i
 
 // 웹팩 빌드하기 (webpack.config.js)
 npm run build
+
+// dist 파일 열기 dist/index.html
+// </body>아래 코드 추가
+<script src="index.bundle.js"></script>
 ```
 
 
