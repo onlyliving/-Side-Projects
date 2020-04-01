@@ -257,9 +257,6 @@ result
     margin-bottom: 40px;
     text-align: center;
 }
-.result-box__bottom-info.is-show{
-    display: block;
-}
 
 .result-item__link {
     display: none;
