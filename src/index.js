@@ -10,7 +10,49 @@ const searchBtn = document.getElementById('searchBtn');
 /**
  * TODO : 객채를 어떻게 쓸 수 있을까?
  * 검색 입력, 검색 결과.. 두 클래스 만들면 되려나?
+ * 
+ * 뷰와 데이터 메소드 구분
+ * 
+ * view : 결과 목록.
+ * data : search 데이터
+
+ 1. 검색 Search
+- Value 값
+- 클릭이벤트
+
+
+
  */
+
+//searchInput
+class Search {
+  constructor(id) {
+    // 입력값
+    this.id = id;
+  }
+}
+
+let search = new Search(searchInput);
+
+search.click = function() {
+  console.log(this);
+
+  // 초기화
+  // reqData.keywords = searchInput.value.trim();
+  reqData.keywords = this.id.value.trim();
+  console.log(`reqData.keywords : ${reqData.keywords}`);
+  resultItemEl = '';
+  reqData.pageNum = 1;
+  document.getElementById('resultBottomInfo').style.display = 'none';
+
+  if (!reqData.keywords) {
+    alert('검색어를 입력해주세요.');
+    return false;
+  }
+
+  getData.loadImage('firstLoad');
+}
+
 
 let reqData = {
   keywords : '',
@@ -63,65 +105,85 @@ const imageHoverEvent = () => {
   return false;
 }
 
-/**
- * 
- * @param {*} firstLoad 
- * 이미지 좋아요가 많은 순으로 내림차순
- */
-const getDateOfImages = (firstLoad) => {
-  unsplash.search.photos(reqData.keywords, reqData.pageNum, reqData.perPage, { orientation: reqData.orientation }).then(toJson).then(json => {
 
-    if (firstLoad === 'firstLoad') {
 
-      // 검색 결과가 없는 경우
-      if (json.total === 0) {
-        resultTopInfo.innerHTML = `<em>[ ${reqData.keywords} ]</em> 검색어에 대한 결과를 찾기 못했습니다. 다른 키워드로 검색해주세요. :)`;
-        document.getElementById('resultEl').innerHTML = '';
-        return false;
-      }
-    }
 
-    if ((json.total !== 0) && (json.results !== [])) {
-      
-      listLoaderEvent.hide();
+/*
+2. 검색 결과 목록 searchResult / resultList / Result
+- 검색필터
+- 검색 10개씩 보이기
+- 스크롤 이벤트
+- 마우스호버 이벤트
+*/
+
+class GetData {
+
+  loadImage(firstLoad) {
+    console.log(this.reqKeyword);
+    unsplash.search.photos(reqData.keywords, reqData.pageNum, reqData.perPage, { orientation: reqData.orientation }).then(toJson).then(json => {
 
       if (firstLoad === 'firstLoad') {
-        document.getElementById('resultTopInfo').innerText = `${json.total}개 이미지를 찾았습니다. 텍스트를 원하는 문장으로 바꿔보세요.`;
-        resDataTotalPage = json.total_pages;
+
+        // 검색 결과가 없는 경우
+        if (json.total === 0) {
+          resultTopInfo.innerHTML = `<em>[ ${this.reqKeyword} ]</em> 검색어에 대한 결과를 찾기 못했습니다. 다른 키워드로 검색해주세요. :)`;
+          document.getElementById('resultEl').innerHTML = '';
+          return false;
+        }
       }
 
-      let reSortData = [];
-      reSortData = json.results;
-      reSortData.sort(function(a, b) {
-        if (a.likes < b.likes) {
-          return 1;
-        }
-        if (a.likes > b.likes) {
-          return -1;
-        }
-        return 0;
-      });
+      if ((json.total !== 0) && (json.results !== [])) {
+        
+        listLoaderEvent.hide();
 
-      // console.log(reSortData);
+        if (firstLoad === 'firstLoad') {
+          document.getElementById('resultTopInfo').innerHTML = `${json.total}개 이미지를 찾았습니다. 텍스트를 원하는 문장으로 바꿔보세요.`;
+          resDataTotalPage = json.total_pages;
+        }
 
-      for (let i = 0; i < reSortData.length; i += 1) {
-        resultItemEl += `
-        <li class="result-item">
-              <a class="result-item__link" href=${reSortData[i].links.html} target="_blank"></a>
-              <textarea class="result-item__textarea">신기루 같은 하루</textarea>
-              <div class="result-item__img-wrap">
-                  <img src=${reSortData[i].urls.small}>
-              </div>
-          </li>`;
+        let reSortData = [];
+        reSortData = json.results;
+        reSortData.sort(function(a, b) {
+          if (a.likes < b.likes) {
+            return 1;
+          }
+          if (a.likes > b.likes) {
+            return -1;
+          }
+          return 0;
+        });
+
+        // console.log(reSortData);
+
+        for (let i = 0; i < reSortData.length; i += 1) {
+          resultItemEl += `
+          <li class="result-item">
+                <a class="result-item__link" href=${reSortData[i].links.html} target="_blank"></a>
+                <textarea class="result-item__textarea">신기루 같은 하루</textarea>
+                <div class="result-item__img-wrap">
+                    <img src=${reSortData[i].urls.small}>
+                </div>
+            </li>`;
+        }
+
+        document.getElementById('resultEl').innerHTML = resultItemEl;
+
+        //
+        imageHoverEvent();
+        document.getElementById('textChangeEvent').style.display = 'flex';
+        document.getElementById('filterEl').style.display='block';
       }
+    });
 
-      document.getElementById('resultEl').innerHTML = resultItemEl;
-      imageHoverEvent();
-      document.getElementById('textChangeEvent').style.display = 'flex';
-      document.getElementById('filterEl').style.display='block';
-    }
-  });
+  }
+
 }
+
+const getData = new GetData();
+
+// getData.event = function(firstLoad) {
+  
+// };
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -135,18 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   searchBtn.addEventListener('click', () => {
-    // 목록 초기화
-    reqData.keywords = searchInput.value.trim();
-    resultItemEl = '';
-    reqData.pageNum = 1;
-    document.getElementById('resultBottomInfo').style.display = 'none';
-    
-    if (!reqData.keywords) {
-      alert('검색어를 입력해주세요.');
-      return false;
-    }
-
-    getDateOfImages('firstLoad');
+    search.click();
   });
 
   window.addEventListener('scroll', () => {
@@ -162,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       
       reqData.pageNum ++;
-      getDateOfImages();
+      getData.loadImage();
     }
   });
 
