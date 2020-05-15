@@ -6,20 +6,52 @@ import Unsplash, { toJson } from "unsplash-js"
 const unsplash = new Unsplash({ accessKey: "NOiz5YETErCrroUe4WlilkzfvRZTx2zq8YjGNoqaYwo" });
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
-// const unsplash = new Unsplash({
-//   accessKey: "{YOUR_ACCESS_KEY}",
-//   secret: "{YOUR_SECRET_KEY}"
-// });
 
-// const unsplash = new Unsplash({
-//   accessKey: "{APP_ACCESS_KEY}",
-//   // Optionally you can also configure a custom header to be sent with every request
-//   headers: {
-//     "X-Custom-Header": "foo"
-//   },
-//   // Optionally if using a node-fetch polyfill or a version of fetch which supports the timeout option, you can configure the request timeout for all requests
-//   timeout: 500 // values set in ms
-// });
+
+// 카드콘텐츠 배경이미지 검색 ImageSearchTable
+// - 검색창 SearchTable
+// 	- 입력창 SearchInput
+// 	- 검색버튼 SearchEventBtn
+// 		- 직접 검색 (입력된 값이 없을 경우 예외처리)
+
+// 	- 검색 키워드 SearchKeyword
+
+// - 검색 결과 ResultTable
+// 	- 필터 (이미지형태, 폰트체, 텍스트 모두 변경) SearchFilter
+// 	- 결과 목록 SearchList
+// 		- 마우스 오버시 링크 보이기
+// 		- 스크롤을 맨 아래로 내리면 더 보기 (12개씩)
+
+
+//searchInput
+class Search {
+  constructor(id) {
+    // 입력값
+    this.id = id;
+  }
+}
+
+let search = new Search(searchInput);
+
+search.click = function() {
+  console.log(this);
+
+  // 초기화
+  // reqData.keywords = searchInput.value.trim();
+  reqData.keywords = this.id.value.trim();
+  console.log(`reqData.keywords : ${reqData.keywords}`);
+  resultItemEl = '';
+  reqData.pageNum = 1;
+  document.getElementById('resultBottomInfo').style.display = 'none';
+
+  if (!reqData.keywords) {
+    alert('검색어를 입력해주세요.');
+    return false;
+  }
+
+  getData.loadImage('firstLoad');
+}
+
 
 let reqData = {
   keywords : '',
@@ -31,65 +63,27 @@ let reqData = {
 let resultItemEl = '';
 let resDataTotalPage = '';
 
-/**
- * 
- * @param {*} firstLoad 
- * 이미지 좋아요가 많은 순으로 내림차순
- */
-const getDateOfImages = (firstLoad) => {
-  unsplash.search.photos(reqData.keywords, reqData.pageNum, reqData.perPage, { orientation: reqData.orientation }).then(toJson).then(json => {
-
-    if (firstLoad === 'firstLoad') {
-      if (json.total === 0) {
-        resultTopInfo.innerHTML = `<em>[ ${reqData.keywords} ]</em> 검색어에 대한 결과를 찾기 못했습니다. 다른 키워드로 검색해주세요. :)`;
-        document.getElementById('resultEl').innerHTML = '';
-        return false;
-      }
-    }
-
-    if ((json.total !== 0) && (json.results !== [])) {
-      
-      if (document.getElementById('loader').classList.contains('is-show')) {
-        document.getElementById('loader').classList.remove('is-show');
-      }
-
-      if (firstLoad === 'firstLoad') {
-        document.getElementById('resultTopInfo').innerText = `${json.total}개 이미지를 찾았습니다. 텍스트를 원하는 문장으로 바꿔보세요.`;
-        resDataTotalPage = json.total_pages;
-      }
-
-      let reSortData = [];
-      reSortData = json.results;
-      reSortData.sort(function(a, b) {
-        if (a.likes < b.likes) {
-          return 1;
-        }
-        if (a.likes > b.likes) {
-          return -1;
-        }
-        return 0;
-      });
-
-      console.log(reSortData);
-
-      for (let i = 0; i < reSortData.length; i += 1) {
-        resultItemEl += `
-        <li class="result-item">
-              <a class="result-item__link" href=${reSortData[i].links.html} target="_blank"></a>
-              <textarea class="result-item__textarea">신기루 같은 하루</textarea>
-              <div class="result-item__img-wrap">
-                  <img src=${reSortData[i].urls.small}>
-              </div>
-          </li>`;
-      }
-
-      document.getElementById('resultEl').innerHTML = resultItemEl;
-      imageHoverEvent();
-      document.getElementById('textChangeEvent').style.display = 'flex';
-      document.getElementById('filterEl').style.display='block';
-    }
-  });
+function Loader(name) {
+  this.name = name;
 }
+
+Loader.prototype.hide = function() {
+  this.name.style.display = 'none';
+};
+
+Loader.prototype.show = function() {
+  this.name.style.display = 'block';
+};
+
+const listLoaderEvent = new Loader(document.getElementById('loader'));
+
+const classAllRemove = (el, className) => {
+  for (let i = 0; i < el.length; i += 1) {
+    if (el[i].classList.contains(className)) {
+      el[i].classList.remove(className);
+    }
+  }
+};
 
 const imageHoverEvent = () => {
   if(document.getElementsByClassName('result-item')) {
@@ -110,6 +104,86 @@ const imageHoverEvent = () => {
   return false;
 }
 
+
+
+
+/*
+2. 검색 결과 목록 searchResult / resultList / Result
+- 검색필터
+- 검색 10개씩 보이기
+- 스크롤 이벤트
+- 마우스호버 이벤트
+*/
+
+class GetData {
+
+  loadImage(firstLoad) {
+    console.log(this.reqKeyword);
+    unsplash.search.photos(reqData.keywords, reqData.pageNum, reqData.perPage, { orientation: reqData.orientation }).then(toJson).then(json => {
+
+      if (firstLoad === 'firstLoad') {
+
+        // 검색 결과가 없는 경우
+        if (json.total === 0) {
+          resultTopInfo.innerHTML = `<em>[ ${this.reqKeyword} ]</em> 검색어에 대한 결과를 찾기 못했습니다. 다른 키워드로 검색해주세요. :)`;
+          document.getElementById('resultEl').innerHTML = '';
+          return false;
+        }
+      }
+
+      if ((json.total !== 0) && (json.results !== [])) {
+        
+        listLoaderEvent.hide();
+
+        if (firstLoad === 'firstLoad') {
+          document.getElementById('resultTopInfo').innerHTML = `${json.total}개 이미지를 찾았습니다. 텍스트를 원하는 문장으로 바꿔보세요.`;
+          resDataTotalPage = json.total_pages;
+        }
+
+        let reSortData = [];
+        reSortData = json.results;
+        reSortData.sort(function(a, b) {
+          if (a.likes < b.likes) {
+            return 1;
+          }
+          if (a.likes > b.likes) {
+            return -1;
+          }
+          return 0;
+        });
+
+        // console.log(reSortData);
+
+        for (let i = 0; i < reSortData.length; i += 1) {
+          resultItemEl += `
+          <li class="result-item">
+                <a class="result-item__link" href=${reSortData[i].links.html} target="_blank"></a>
+                <textarea class="result-item__textarea">신기루 같은 하루</textarea>
+                <div class="result-item__img-wrap">
+                    <img src=${reSortData[i].urls.small}>
+                </div>
+            </li>`;
+        }
+
+        document.getElementById('resultEl').innerHTML = resultItemEl;
+
+        //
+        imageHoverEvent();
+        document.getElementById('textChangeEvent').style.display = 'flex';
+        document.getElementById('filterEl').style.display='block';
+      }
+    });
+
+  }
+
+}
+
+const getData = new GetData();
+
+// getData.event = function(firstLoad) {
+  
+// };
+
 document.addEventListener('DOMContentLoaded', () => {
 
   searchInput.addEventListener('keypress', () => {
@@ -122,37 +196,23 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   searchBtn.addEventListener('click', () => {
-    reqData.keywords = searchInput.value.trim();
-    resultItemEl = '';
-    reqData.pageNum = 1;
-
-    if (document.getElementById('resultBottomInfo').classList.contains('is-show')) {
-      document.getElementById('resultBottomInfo').classList.remove('is-show');
-    }
-    
-    if (!reqData.keywords) {
-      alert('검색어를 입력해주세요.');
-      return false;
-    }
-
-    getDateOfImages('firstLoad');
-
+    search.click();
   });
 
   window.addEventListener('scroll', () => {
     if (document.documentElement.scrollTop === document.documentElement.scrollHeight - document.documentElement.clientHeight) {
-      console.log('스크롤이 맨 아래에 있습니다.')
-      document.getElementById('loader').classList.add('is-show');
+      // console.log('스크롤이 맨 아래에 있습니다.')
+      listLoaderEvent.show();
 
+      // 스크롤해도 데이터가 더이상 없는 경우
       if (reqData.pageNum === resDataTotalPage) {
-        document.getElementById('loader').classList.remove('is-show');
-        document.getElementById('resultBottomInfo').classList.add('is-show');
+        listLoaderEvent.hide();
+        document.getElementById('resultBottomInfo').style.display = 'block';
         return true;
       }
       
       reqData.pageNum ++;
-      getDateOfImages();
-
+      getData.loadImage();
     }
   });
 
@@ -165,16 +225,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   for (let i = 0; i < document.querySelectorAll('.search-filter__list li').length; i += 1) {
-    // 필터 클릭할 때 마다 api 요청.
     document.querySelectorAll('.search-filter__list li')[i].addEventListener('click', () => {
 
-      // is-active class reset.
-      for (let j = 0; j < document.querySelectorAll('.search-filter__list li').length; j += 1) {
-        if (document.querySelectorAll('.search-filter__list li')[j].classList.contains('is-active')) {
-          document.querySelectorAll('.search-filter__list li')[j].classList.remove('is-active');
-        }
-      }
-
+      classAllRemove(document.querySelectorAll('.search-filter__list li'), 'is-active');
       document.querySelectorAll('.search-filter__list li')[i].classList.contains('is-active') ? document.querySelectorAll('.search-filter__list li')[i].classList.remove('is-active') : document.querySelectorAll('.search-filter__list li')[i].classList.add('is-active');
       reqData.orientation = document.querySelectorAll('.search-filter__list li')[i].querySelector('button').value;
       searchBtn.click();

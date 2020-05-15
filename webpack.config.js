@@ -2,7 +2,6 @@ const path = require('path');
 const webpack = require('webpack');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const HtmlWebpackInjector = require('html-webpack-injector');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -16,21 +15,25 @@ module.exports = {
   devtool: 'source-map',
   entry: {
     index: [path.resolve(__dirname, 'src/index.js')],
+    'app/app': [path.resolve(__dirname, 'src/useReact/index.js')],
   },
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: '[name].bundle.js?[chunkhash]',
   },
+  devServer: {
+    contentBase: './dist',
+  },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader?cacheDirectory',
-          options: {
-            presets: ['@babel/preset-env'],
-          },
+          // options: {
+          //   presets: ['@babel/preset-env', '@bable/preset-react'],
+          // },
         },
       },
       {
@@ -73,7 +76,11 @@ module.exports = {
       filename: 'index.html',
       chunks: ['index']
     }),
-    new HtmlWebpackInjector()
+    new HtmlWebpackPlugin({
+      template: 'src/useReact/index.html',
+      filename: 'app/app.html',
+      chunks: ['app/app']
+    }),
   ],
   optimization: {
     // removeEmptyChunks 비어있는 청크를 감지하고 제거
