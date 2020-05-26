@@ -5,10 +5,39 @@ import FilterFontFamily from './FilterFontFamily';
 import FilterImageShape from './FilterImageShape';
 
 class SearchTable extends Component {
+
+    shouldComponentUpdate(newProps, newState) {
+        console.log('>>>>>>> ===== SearchTable - shouldComponentUpdate =======');
+
+        // console.log(newProps);
+        // console.log(newState);
+        // console.log(this);
+        if (newProps.data.requestData.keywords === this.props.data.requestData.keywords) {
+            return false;
+        }
+
+        return true;
+    }
+
+    showResultFilterCheck() {
+        console.log('==== showResultFilterCheck ====');
+        // console.log(this);
+        if (this.props.data.requestData.keywords !== '') {
+            return <article id="filterEl" className="search-filter">
+                        <h2 className="hide-text">검색 필터</h2>
+                        <div className="search-filter-wrap">
+                            <FilterImageShape data={this.props.data}></FilterImageShape>
+                            <FilterFontFamily data={this.props.data.filter}></FilterFontFamily>
+                        </div>
+                    </article>;
+        }
+
+        return '';
+    }
+
     render() {
         console.log(`==> SearchTable render`);
         let filterDataObj = this.props.data.filter;
-        let tagsDataObj = this.props.data.tags;
 
         return (
             <section className="search-box-wrap">
@@ -23,16 +52,24 @@ class SearchTable extends Component {
                     </ul>
                 </article>
 
-                <SearchInput></SearchInput>
-                <SearchKeywords data={tagsDataObj}></SearchKeywords>
+                <SearchInput 
+                    data={this.props.data} 
+                    onChangePage={function() {
 
-                <article id="filterEl" className="search-filter">
-                    <h2 className="hide-text">검색 필터</h2>
-                    <div className="search-filter-wrap">
-                        <FilterImageShape data={filterDataObj}></FilterImageShape>
-                        <FilterFontFamily data={filterDataObj}></FilterFontFamily>
-                    </div>
-                </article>
+                        if (!document.getElementById('searchInput').value) {
+                            alert('검색어를 입력해주세요.');
+                            return false;
+                        }
+
+                        this.props.onChange();
+
+                    }.bind(this)} 
+                >
+                </SearchInput>
+                <SearchKeywords filterData={this.props.data} reqData={this.state}></SearchKeywords>
+
+                {this.showResultFilterCheck()}
+
             </section>
 
         )

@@ -4,11 +4,17 @@ class SearchKeywords extends Component {
     render() {
         console.log(`==> SearchKeywords render`);
 
-        let tagDataArr = this.props.data;
+        let tagDataArr = this.props.filterData.tags;
         let tagList = [];
         for (let i = 0; i < tagDataArr.length; i += 1) {
             tagList.push(
-                <li key={i}><button type="button" value={tagDataArr[i].value}>{tagDataArr[i].title}</button></li>
+                <li key={i} 
+                    onClick={function(e) {
+                        e.preventDefault();
+                        document.getElementById('searchInput').value = tagDataArr[i].value;
+                        document.getElementById('searchBtn').click();
+                    }.bind(this)}
+                ><button type="button" value={tagDataArr[i].value}>{tagDataArr[i].title}</button></li>
             )
         }
 
